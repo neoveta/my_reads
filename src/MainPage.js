@@ -1,81 +1,29 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Book from './Book';
+import Bookshelf from './Bookshelf'
 
 class MainPage extends Component {
-    render (){
-        return (
-            <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    { this.props.books
-                        .filter(book => book.shelf === 'currentlyReading')
-                        .map(book => (
-                            <li key={book.id}>
-                                <Book 
-                                book={book}
-                                changeShelf={this.props.changeShelf}
-                                currentValue="currentlyReading"     //set a default value for book for current shelf 
-                                />
-                            </li>
-                        ))
-                    }  
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    { this.props.books
-                        .filter(book => book.shelf === 'wantToRead')
-                        .map(book => (
-                            <li key={book.id}>
-                                <Book 
-                                book={book}
-                                changeShelf={this.props.changeShelf}
-                                currentValue="wantToRead"   //set a default value for book for current shelf 
-                                />
-                            </li>
-                        ))
-                    }
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    { this.props.books
-                        .filter(book => book.shelf === 'read')
-                        .map(book => (
-                            <li key={book.id}>
-                                <Book 
-                                book={book}
-                                changeShelf={this.props.changeShelf}
-                                currentValue="read" //set a default value for book for current shelf 
-                                />
-                            </li>
-                        ))
-                    }
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="open-search">
-              <Link to="/search" >Add a book</Link>
+  render (){
+    let currentlyReading = this.props.books.filter(book => book.shelf === "currentlyReading"); 
+    let wantToRead = this.props.books.filter(book => book.shelf === "wantToRead");
+    let read = this.props.books.filter(book => book.shelf === "read");
+    
+    return (
+      <div className="list-books">
+      <div className="list-books-title">
+        <h1>MyReads</h1>
+      </div>
+         <div className="list-books-content">
+            <Bookshelf title="Currently Reading" books={currentlyReading} changeShelf={this.props.changeShelf} />
+            <Bookshelf title="Want To read" books={wantToRead} changeShelf={this.props.changeShelf}/>
+            <Bookshelf title="Read" books={read} changeShelf={this.props.changeShelf}/>
+          </div>
+          <div className="open-search">
+            <Link to="/search" >Add a book</Link>
             </div>
           </div>    
-        );
-    }
-    }
+    );
+  }
+}
 
 export default MainPage;   

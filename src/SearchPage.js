@@ -7,7 +7,25 @@ import Book from './Book';
 class SearchPage extends Component {
     state={
         query: '',
-        searchQuery: []
+        searchRes: [],
+        books: []
+    }
+
+    componentDidMount() {   //get the initial state of the page by getting all books then filtering them out by their states
+        BooksAPI.getAll().then((books) => {
+           this.setState({ 
+             books: books 
+        
+            });
+          
+        })
+         console.log('Books updated');
+    }
+
+    componentWillReceiveProps(props) {   //state was changed, reload list of book to set proper book.shelf
+        this.setState({ 
+            books: props.books 
+        });
     }
 
     updateQuery = (query) => {    // this method will update state query
@@ -18,18 +36,18 @@ class SearchPage extends Component {
     }
 
     updateSearchQuery = (query) => {
-        if (query){     //if there is a query - fetch the books
-            BooksAPI.search(query).then((searchQuery) => {
-                if(searchQuery.error){
-                    this.setState({searchQuery: []});   //if there is an error make sure that searchQuery still an arrey (.map())
-                } else{
-                    this.setState({searchQuery: searchQuery})
+        if (query){     //if there is a search result - fetch the books
+            BooksAPI.search(query).then((books) => {
+                if(books.error){
+                    this.setState({searchRes: []});   //if there is an error make sure that searchQuery still an array (.map())
+                }else{
+                    this.setState({searchRes: books})
 
                 }
             })
         } else {        //if there is no query - set state as empty arrey 
-            this.setState({searchQuery: []});
-        }
+            this.setState({searchRes: []});
+        }   
     }
 
     render(){
@@ -41,30 +59,31 @@ class SearchPage extends Component {
                         <input 
                         type="text" 
                         placeholder="Search by title or author"
-                        value={this.state.query}
                         onChange={(event)=> this.updateQuery(event.target.value)}
+                        value={this.props.shelf}    //the value sets depending of selected shelf on MainPage
                         />
 
                     </div>
                     </div>
                     <div className="search-books-results">
                     <ol className="books-grid"> {
-                        this.state.searchQuery.map(searchQuery => {
-                            let shelf ="none";
-                        this.props.books.map(book => (
-                            book.id === searchQuery.id ?
-                            shelf = book.shelf :
-                            ''           
-                        ));
+                        this.state.searchRes.map(book => {
+                            //by some reason search does not return shelf, so we search for shelf in our book collection
+                            book.shelf = 'none';
+                            for(var i =0 ; i < this.state.books.length; ++i){
+                                if (book.id === this.state.books[i].id){
+                                    book.shelf = this.state.books[i].shelf;
+                                    break;
+                                }
+                            }
                             return(
-                                <li key={searchQuery.id}>
+                                <li key={book.id}>
                                     <Book
-                                        book={searchQuery}         //display books according to the query 
-                                        moveShelf = {this.props.moveShelf}  // select value to place the book in a certain shelf
-                                        currentValue = {shelf}  //set value 'none' for books that non assighmed to any shelf 
+                                        book={book}         //display books according to the query 
+                                        changeShelf = {this.props.changeShelf}
                                         />  
                                     </li>
-                            )}
+                            )}   
                         )}
                     </ol>
                 </div>

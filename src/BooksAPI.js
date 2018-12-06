@@ -9,7 +9,10 @@ if (!token)
 
 const headers = {
   'Accept': 'application/json',
-  'Authorization': token
+  'Authorization': token,
+  'pragma' : 'no-cache',
+  'cache-control': 'no-cache',
+  'cache' : 'no-store'
 }
 
 export const get = (bookId) =>

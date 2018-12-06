@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 
 class Book extends Component {
     render(){
+     // console.log(this.props.book);
       let bookThumbnail = this.props.book.imageLinks ?
-      this.props.book.imageLinks.thumbnail : //if there is no thumbnail - return empty string
+      this.props.book.imageLinks.thumbnail : 
       '';
         return(
             <div className="book">
@@ -11,10 +12,10 @@ class Book extends Component {
               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${bookThumbnail}"`}}></div>
               <div className="book-shelf-changer">
                 <select
-                onChange={(event) => this.props.moveShelf(
+                onChange={(event) => this.props.changeShelf(   //updates the value of book (current shelf for book)
                     this.props.book, event.target.value         //if we change the value of book it will be past here 
                 )}
-                value={this.props.currentValue} //the value sets depending of current shelf 
+                value={this.props.book.shelf} //the value sets depending of selected shelf. value in select the same as current shelf
                 >
                   <option value="move" disabled>Move to...</option>
                   <option value="currentlyReading">Currently Reading</option>
