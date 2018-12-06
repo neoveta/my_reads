@@ -19,7 +19,7 @@ class SearchPage extends Component {
             });
           
         })
-         console.log('Books updated');
+        //console.log('Books updated');
     }
 
     componentWillReceiveProps(props) {   //state was changed, reload list of book to set proper book.shelf

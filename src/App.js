@@ -19,8 +19,8 @@ class App extends React.Component {
 
   changeShelf = (book,shelf) => {
     //console.log('UPDATE,', book, shelf);
-    BooksAPI.update(book,shelf);//then(response => console.log('Success:', JSON.stringify(response)))
-   this.componentDidMount();
+    BooksAPI.update(book,shelf);  //then(response => console.log('Success:', JSON.stringify(response)))
+      this.componentDidMount();
 
   }
 
