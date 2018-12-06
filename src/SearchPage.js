@@ -15,9 +15,7 @@ class SearchPage extends Component {
         BooksAPI.getAll().then((books) => {
            this.setState({ 
              books: books 
-        
-            });
-          
+            });  
         })
         //console.log('Books updated');
     }
@@ -36,13 +34,15 @@ class SearchPage extends Component {
     }
 
     updateSearchQuery = (query) => {
-        if (query){     //if there is a search result - fetch the books
+        if (query){     //if there is a search result - fetch the books (query === this.state.query)
+            (query === this.state.query)
             BooksAPI.search(query).then((books) => {
-                if(books.error){
-                    this.setState({searchRes: []});   //if there is an error make sure that searchQuery still an array (.map())
-                }else{
+                if(query === this.state.query){
+                    if(books.error){
+                        this.setState({searchRes: []});   //if there is an error make sure that searchQuery still an array (.map())
+                } else {
                     this.setState({searchRes: books})
-
+                }
                 }
             })
         } else {        //if there is no query - set state as empty arrey 
